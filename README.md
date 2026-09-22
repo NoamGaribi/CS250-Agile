@@ -1,9 +1,9 @@
 # CS250-Agile
-ryder
-
-
-Noam Garibi
-
+Team members:
+- Jacobo Ramos
+- Liliana Carrillo
+- Ryder
+- Noam Garibi
 
 React and Next.js 
 
@@ -12,5 +12,3 @@ In order to run code:
 cd my-app
 
 npm run dev
-- Jacobo Ramos
-Liliana Carrillo
