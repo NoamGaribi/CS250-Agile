@@ -1,2 +1,11 @@
 # CS250-Agile
-Noam Work
+
+Noam Garibi
+
+
+React and Next.js 
+
+In order to run code:
+
+cd my-app
+npm run dev
