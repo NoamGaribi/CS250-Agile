@@ -1,26 +1,43 @@
-import { signIn } from "@/auth";
 import Link from "next/link";
+import { signIn } from "@/auth";
 
-export default function Home() {
+export default function SignUp() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-red-50 px-4">
       <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-8 shadow-lg">
-        
+
         <div className="mb-8 text-center">
           <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-red-600 text-2xl font-bold text-white">
             DE
           </div>
 
           <h1 className="text-3xl font-semibold text-zinc-900">
-            Degree Evaluation
+            Create Account
           </h1>
 
           <p className="mt-2 text-sm text-zinc-500">
-            Sign in to view and manage your academic progress
+            Create your Degree Evaluation account
           </p>
         </div>
 
+        {/* Regular Sign Up */}
         <form className="space-y-5">
+          <div>
+            <label
+              htmlFor="name"
+              className="mb-2 block text-sm font-medium text-zinc-700"
+            >
+              Full Name
+            </label>
+
+            <input
+              id="name"
+              type="text"
+              placeholder="John Smith"
+              className="w-full rounded-lg border border-zinc-300 px-4 py-3 text-zinc-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
+            />
+          </div>
+
           <div>
             <label
               htmlFor="email"
@@ -48,41 +65,43 @@ export default function Home() {
             <input
               id="password"
               type="password"
-              placeholder="Enter your password"
+              placeholder="Create a password"
               className="w-full rounded-lg border border-zinc-300 px-4 py-3 text-zinc-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
             />
           </div>
 
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 text-sm text-zinc-600">
-              <input type="checkbox" className="accent-red-600" />
-              Remember me
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="mb-2 block text-sm font-medium text-zinc-700"
+            >
+              Confirm Password
             </label>
 
-            <button
-              type="button"
-              className="text-sm font-medium text-red-600 hover:underline"
-            >
-              Forgot password?
-            </button>
+            <input
+              id="confirmPassword"
+              type="password"
+              placeholder="Confirm your password"
+              className="w-full rounded-lg border border-zinc-300 px-4 py-3 text-zinc-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
+            />
           </div>
 
           <button
             type="submit"
             className="w-full rounded-lg bg-red-600 py-3 font-medium text-white transition hover:bg-red-700"
           >
-            Sign In
+            Create Account
           </button>
         </form>
 
-        {/* Divider */}
+        {/* OR Divider */}
         <div className="my-6 flex items-center">
           <div className="flex-1 border-t border-zinc-200" />
           <span className="px-4 text-sm text-zinc-400">OR</span>
           <div className="flex-1 border-t border-zinc-200" />
         </div>
 
-        {/* Google Login */}
+        {/* Google Sign Up */}
         <form
           action={async () => {
             "use server";
@@ -117,21 +136,21 @@ export default function Home() {
               />
             </svg>
 
-            Continue with Google
+            Sign up with Google
           </button>
         </form>
 
-        {/* Sign Up */}
+        {/* Back to Login */}
         <div className="mt-6 text-center">
           <p className="text-sm text-zinc-600">
-            Don&apos;t have an account?
+            Already have an account?
           </p>
 
           <Link
-            href="/signup"
-            className="mt-3 mx-auto w-40 block rounded-lg border border-red-600 py-3 font-medium text-xs text-red-600 transition hover:bg-red-50"
+            href="/"
+            className="mt-3 mx-auto block w-40 rounded-lg border border-red-600 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
           >
-            Create Account
+            Sign In
           </Link>
         </div>
 
