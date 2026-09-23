@@ -1,4 +1,8 @@
 # CS250-Agile
+Ryder Garcia 
+Noam Garibi
+Jacobo Ramos
+Liliana Carrillo
 Team members:
 - Jacobo Ramos
 - Liliana Carrillo
