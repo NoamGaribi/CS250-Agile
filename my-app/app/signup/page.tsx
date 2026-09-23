@@ -67,7 +67,7 @@ export default function SignUp() {
             await signIn("credentials", {
               email,
               password,
-              redirectTo: "/",
+              redirectTo: "/dashboard",
             });
           }}
         >
