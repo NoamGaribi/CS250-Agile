@@ -1,11 +1,27 @@
 import { signIn } from "@/auth";
+import { AuthError } from "next-auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+type HomeProps = {
+  searchParams: Promise<{
+    error?: string;
+  }>;
+};
+
+export default async function Home({ searchParams }: HomeProps) {
+  const { error } = await searchParams;
+
+  const errorMessage =
+    error === "CredentialsSignin"
+      ? "Invalid email or password."
+      : error === "AuthError"
+        ? "We could not sign you in. Please try again."
+        : null;
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-red-50 px-4">
       <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-8 shadow-lg">
-
         <div className="mb-8 text-center">
           <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-red-600 text-2xl font-bold text-white">
             DE
@@ -20,17 +36,52 @@ export default function Home() {
           </p>
         </div>
 
+        {errorMessage && (
+          <div
+            role="alert"
+            className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
+            {errorMessage}
+          </div>
+        )}
+
         {/* Email / Password Login */}
         <form
           className="space-y-5"
           action={async (formData) => {
             "use server";
 
-            await signIn("credentials", {
-              email: formData.get("email"),
-              password: formData.get("password"),
-              redirectTo: "/dashboard",
-            });
+            const email = String(formData.get("email") ?? "")
+              .trim()
+              .toLowerCase();
+            const password = String(formData.get("password") ?? "");
+
+            if (!email || !password) {
+              redirect("/?error=CredentialsSignin");
+            }
+
+            try {
+              await signIn("credentials", {
+                email,
+                password,
+                redirectTo: "/dashboard",
+              });
+            } catch (error) {
+              // Auth.js intentionally throws on a failed credentials sign-in.
+              // Convert expected authentication failures into a normal UI state.
+              if (error instanceof AuthError) {
+                if (error.type === "CredentialsSignin") {
+                  redirect("/?error=CredentialsSignin");
+                }
+
+                redirect("/?error=AuthError");
+              }
+
+              // A successful Auth.js redirect is also implemented as a thrown
+              // Next.js redirect signal. Re-throw anything that is not an
+              // Auth.js error so Next.js can complete that redirect normally.
+              throw error;
+            }
           }}
         >
           <div>
