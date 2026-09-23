@@ -1,15 +1,8 @@
 import bcrypt from "bcryptjs";
-import pool from "@/app/lib/db";
-import type {
-  RowDataPacket,
-  ResultSetHeader,
-} from "mysql2";
+import pool, { isDuplicateEmail } from "@/app/lib/db";
+import type { ResultSetHeader } from "mysql2";
 
 // API route for handling user signup
-
-type ExistingUserRow = RowDataPacket & {
-  id: number;
-};
 
 export async function POST(request: Request) {
   try {
@@ -19,18 +12,6 @@ export async function POST(request: Request) {
       return Response.json(
         { error: "Email and password are required" },
         { status: 400 }
-      );
-    }
-
-    const [existing] = await pool.query<ExistingUserRow[]>(
-      "SELECT id FROM `user` WHERE email = ? LIMIT 1",
-      [email]
-    );
-
-    if (existing.length > 0) {
-      return Response.json(
-        { error: "Email already registered" },
-        { status: 409 }
       );
     }
 
@@ -55,6 +36,14 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
+    // The UNIQUE index on email is what rejects a taken address.
+    if (isDuplicateEmail(error)) {
+      return Response.json(
+        { error: "Email already registered" },
+        { status: 409 }
+      );
+    }
+
     console.error("Signup error:", error);
 
     return Response.json(

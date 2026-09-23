@@ -1,5 +1,4 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import pool from "@/app/lib/db";
@@ -15,8 +14,6 @@ type UserRow = RowDataPacket & {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-    Google,
-
     Credentials({
       credentials: {
         email: {},
