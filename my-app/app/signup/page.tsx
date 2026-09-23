@@ -2,53 +2,83 @@ import Link from "next/link";
 import { signIn } from "@/auth";
 import bcrypt from "bcryptjs";
 import pool, { isDuplicateEmail } from "@/app/lib/db";
+import { redirect } from "next/navigation";
+
+type SignUpProps = {
+  searchParams: Promise<{
+    error?: string;
+  }>;
+};
 
 // Sign Up Page Component
-export default function SignUp() {
+export default async function SignUp({ searchParams }: SignUpProps) {
+  const { error } = await searchParams;
+
+  const errorMessage =
+    error === "MissingFields"
+      ? "All fields are required."
+      : error === "PasswordsDoNotMatch"
+        ? "Passwords do not match."
+        : error === "PasswordTooShort"
+          ? "Password must be at least 8 characters."
+          : error === "EmailExists"
+            ? "An account with this email already exists."
+            : error === "SignupError"
+              ? "We could not create your account. Please try again."
+              : null;
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-red-50 px-4">
       <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-8 shadow-lg">
-
         <h1 className="mb-6 text-3xl font-semibold">
           Create Account
         </h1>
+
+        {errorMessage && (
+          <div
+            role="alert"
+            className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
+            {errorMessage}
+          </div>
+        )}
+
         {/* Sign Up Form */}
         <form
           className="space-y-5"
           action={async (formData) => {
             "use server";
-            // Validate form data
+
             const fullName = String(formData.get("name") ?? "").trim();
             const email = String(formData.get("email") ?? "")
               .trim()
               .toLowerCase();
-            // Ensure email is valid
             const password = String(formData.get("password") ?? "");
             const confirmPassword = String(
               formData.get("confirmPassword") ?? ""
             );
 
-            if (!fullName || !email || !password) {
-              throw new Error("All fields are required");
+            if (!fullName || !email || !password || !confirmPassword) {
+              redirect("/signup?error=MissingFields");
             }
 
             if (password !== confirmPassword) {
-              throw new Error("Passwords do not match");
+              redirect("/signup?error=PasswordsDoNotMatch");
             }
 
             if (password.length < 8) {
-              throw new Error("Password must be at least 8 characters");
+              redirect("/signup?error=PasswordTooShort");
             }
+
             const nameParts = fullName.split(/\s+/);
             const firstName = nameParts[0];
             const lastName =
               nameParts.length > 1
                 ? nameParts.slice(1).join(" ")
                 : null;
-            // Hash the password before storing it in the database
+
             const passwordHash = await bcrypt.hash(password, 12);
 
-            // Insert the new user, the database rejects a taken email
             try {
               await pool.query(
                 `INSERT INTO \`user\`
@@ -58,12 +88,15 @@ export default function SignUp() {
               );
             } catch (error) {
               if (isDuplicateEmail(error)) {
-                throw new Error("An account with this email already exists");
+                redirect("/signup?error=EmailExists");
               }
 
-              throw error;
+              console.error("Signup error:", error);
+              redirect("/signup?error=SignupError");
             }
 
+            // The new account now exists, so credentials login should succeed.
+            // If it does, Auth.js redirects to /dashboard.
             await signIn("credentials", {
               email,
               password,
@@ -118,7 +151,6 @@ export default function SignUp() {
             Back to Sign In
           </Link>
         </div>
-
       </div>
     </div>
   );
