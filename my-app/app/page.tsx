@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-red-50 px-4">
       <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-8 shadow-lg">
-        
+
         <div className="mb-8 text-center">
           <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-red-600 text-2xl font-bold text-white">
             DE
@@ -20,7 +20,19 @@ export default function Home() {
           </p>
         </div>
 
-        <form className="space-y-5">
+        {/* Email / Password Login */}
+        <form
+          className="space-y-5"
+          action={async (formData) => {
+            "use server";
+
+            await signIn("credentials", {
+              email: formData.get("email"),
+              password: formData.get("password"),
+              redirectTo: "/",
+            });
+          }}
+        >
           <div>
             <label
               htmlFor="email"
@@ -31,7 +43,9 @@ export default function Home() {
 
             <input
               id="email"
+              name="email"
               type="email"
+              required
               placeholder="student@university.edu"
               className="w-full rounded-lg border border-zinc-300 px-4 py-3 text-zinc-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
             />
@@ -47,7 +61,9 @@ export default function Home() {
 
             <input
               id="password"
+              name="password"
               type="password"
+              required
               placeholder="Enter your password"
               className="w-full rounded-lg border border-zinc-300 px-4 py-3 text-zinc-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
             />
@@ -86,7 +102,10 @@ export default function Home() {
         <form
           action={async () => {
             "use server";
-            await signIn("google", { redirectTo: "/" });
+
+            await signIn("google", {
+              redirectTo: "/",
+            });
           }}
         >
           <button
