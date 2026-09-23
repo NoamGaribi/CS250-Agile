@@ -1,7 +1,15 @@
 import bcrypt from "bcryptjs";
 import pool from "@/app/lib/db";
+import type {
+  RowDataPacket,
+  ResultSetHeader,
+} from "mysql2";
 
 // API route for handling user signup
+
+type ExistingUserRow = RowDataPacket & {
+  id: number;
+};
 
 export async function POST(request: Request) {
   try {
@@ -13,7 +21,8 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    const [existing]: any = await pool.query(
+
+    const [existing] = await pool.query<ExistingUserRow[]>(
       "SELECT id FROM `user` WHERE email = ? LIMIT 1",
       [email]
     );
@@ -29,7 +38,7 @@ export async function POST(request: Request) {
     const passwordHash = await bcrypt.hash(password, 12);
 
     // Insert the new user into the database
-    const [result]: any = await pool.query(
+    const [result] = await pool.query<ResultSetHeader>(
       `INSERT INTO \`user\`
        (email, password_hash, name, last_name)
        VALUES (?, ?, ?, ?)`,

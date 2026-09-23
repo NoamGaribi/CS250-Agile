@@ -3,6 +3,15 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import pool from "@/app/lib/db";
+import type { RowDataPacket } from "mysql2";
+
+type UserRow = RowDataPacket & {
+  id: number;
+  email: string;
+  password_hash: string | null;
+  name: string | null;
+  last_name: string | null;
+};
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -22,7 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
-        const [rows]: any = await pool.query(
+        const [rows] = await pool.query<UserRow[]>(
           `SELECT id, email, password_hash, name, last_name
            FROM \`user\`
            WHERE email = ?

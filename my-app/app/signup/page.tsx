@@ -2,6 +2,11 @@ import Link from "next/link";
 import { signIn } from "@/auth";
 import bcrypt from "bcryptjs";
 import pool from "@/app/lib/db";
+import type { RowDataPacket } from "mysql2";
+
+type ExistingUserRow = RowDataPacket & {
+  id: number;
+};
 
 // Sign Up Page Component
 export default function SignUp() {
@@ -40,7 +45,7 @@ export default function SignUp() {
               throw new Error("Password must be at least 8 characters");
             }
             // Check if email already exists in the database
-            const [existingUsers]: any = await pool.query(
+            const [existingUsers] = await pool.query<ExistingUserRow[]>(
               `SELECT id
                FROM \`user\`
                WHERE email = ?
