@@ -1,12 +1,7 @@
 import Link from "next/link";
 import { signIn } from "@/auth";
 import bcrypt from "bcryptjs";
-import pool from "@/app/lib/db";
-import type { RowDataPacket } from "mysql2";
-
-type ExistingUserRow = RowDataPacket & {
-  id: number;
-};
+import pool, { isDuplicateEmail } from "@/app/lib/db";
 
 // Sign Up Page Component
 export default function SignUp() {
@@ -44,19 +39,6 @@ export default function SignUp() {
             if (password.length < 8) {
               throw new Error("Password must be at least 8 characters");
             }
-            // Check if email already exists in the database
-            const [existingUsers] = await pool.query<ExistingUserRow[]>(
-              `SELECT id
-               FROM \`user\`
-               WHERE email = ?
-               LIMIT 1`,
-              [email]
-            );
-
-            if (existingUsers.length > 0) {
-              throw new Error("An account with this email already exists");
-            }
-
             const nameParts = fullName.split(/\s+/);
             const firstName = nameParts[0];
             const lastName =
@@ -66,12 +48,21 @@ export default function SignUp() {
             // Hash the password before storing it in the database
             const passwordHash = await bcrypt.hash(password, 12);
 
-            await pool.query(
-              `INSERT INTO \`user\`
-               (email, password_hash, name, last_name)
-               VALUES (?, ?, ?, ?)`,
-              [email, passwordHash, firstName, lastName]
-            );
+            // Insert the new user, the database rejects a taken email
+            try {
+              await pool.query(
+                `INSERT INTO \`user\`
+                 (email, password_hash, name, last_name)
+                 VALUES (?, ?, ?, ?)`,
+                [email, passwordHash, firstName, lastName]
+              );
+            } catch (error) {
+              if (isDuplicateEmail(error)) {
+                throw new Error("An account with this email already exists");
+              }
+
+              throw error;
+            }
 
             await signIn("credentials", {
               email,
@@ -119,22 +110,6 @@ export default function SignUp() {
             className="w-full rounded-lg bg-red-600 py-3 text-white"
           >
             Create Account
-          </button>
-        </form>
-
-        <div className="my-6 text-center">OR</div>
-
-        <form
-          action={async () => {
-            "use server";
-            await signIn("google", { redirectTo: "/" });
-          }}
-        >
-          <button
-            type="submit"
-            className="w-full rounded-lg border py-3"
-          >
-            Sign up with Google
           </button>
         </form>
 
