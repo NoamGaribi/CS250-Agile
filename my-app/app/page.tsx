@@ -1,69 +1,167 @@
-import Image from "next/image";
+import { signIn } from "@/auth";
+import { AuthError } from "next-auth";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+type HomeProps = {
+  searchParams: Promise<{
+    error?: string;
+  }>;
+};
+
+export default async function Home({ searchParams }: HomeProps) {
+  const { error } = await searchParams;
+
+  const errorMessage =
+    error === "CredentialsSignin"
+      ? "Invalid email or password."
+      : error === "AuthError"
+        ? "We could not sign you in. Please try again."
+        : null;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="flex min-h-screen items-center justify-center bg-red-50 px-4">
+      <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-8 shadow-lg">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-red-600 text-2xl font-bold text-white">
+            DE
+          </div>
+
+          <h1 className="text-3xl font-semibold text-zinc-900">
+            Degree Evaluation
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className="mt-2 text-sm text-zinc-500">
+            Sign in to view and manage your academic progress
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {errorMessage && (
+          <div
+            role="alert"
+            className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+            {errorMessage}
+          </div>
+        )}
+
+        {/* Email / Password Login */}
+        <form
+          className="space-y-5"
+          action={async (formData) => {
+            "use server";
+
+            const email = String(formData.get("email") ?? "")
+              .trim()
+              .toLowerCase();
+            const password = String(formData.get("password") ?? "");
+
+            if (!email || !password) {
+              redirect("/?error=CredentialsSignin");
+            }
+
+            try {
+              await signIn("credentials", {
+                email,
+                password,
+                redirectTo: "/dashboard",
+              });
+            } catch (error) {
+              // Auth.js intentionally throws on a failed credentials sign-in.
+              // Convert expected authentication failures into a normal UI state.
+              if (error instanceof AuthError) {
+                if (error.type === "CredentialsSignin") {
+                  redirect("/?error=CredentialsSignin");
+                }
+
+                redirect("/?error=AuthError");
+              }
+
+              // A successful Auth.js redirect is also implemented as a thrown
+              // Next.js redirect signal. Re-throw anything that is not an
+              // Auth.js error so Next.js can complete that redirect normally.
+              throw error;
+            }
+          }}
+        >
+          <div>
+            <label
+              htmlFor="email"
+              className="mb-2 block text-sm font-medium text-zinc-700"
+            >
+              Student Email
+            </label>
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="student@university.edu"
+              className="w-full rounded-lg border border-zinc-300 px-4 py-3 text-zinc-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </div>
+
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-2 block text-sm font-medium text-zinc-700"
+            >
+              Password
+            </label>
+
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              placeholder="Enter your password"
+              className="w-full rounded-lg border border-zinc-300 px-4 py-3 text-zinc-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-2 text-sm text-zinc-600">
+              <input type="checkbox" className="accent-red-600" />
+              Remember me
+            </label>
+
+            <button
+              type="button"
+              className="text-sm font-medium text-red-600 hover:underline"
+            >
+              Forgot password?
+            </button>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-red-600 py-3 font-medium text-white transition hover:bg-red-700"
           >
-            Documentation
-          </a>
+            Sign In
+          </button>
+        </form>
+
+        {/* Sign Up */}
+        <div className="mt-6 text-center">
+          <p className="text-sm text-zinc-600">
+            Don&apos;t have an account?
+          </p>
+
+          <Link
+            href="/signup"
+            className="mt-3 mx-auto w-40 block rounded-lg border border-red-600 py-3 font-medium text-xs text-red-600 transition hover:bg-red-50"
+          >
+            Create Account
+          </Link>
         </div>
-      </main>
+
+        <div className="mt-8 border-t border-zinc-100 pt-5 text-center">
+          <p className="text-xs text-zinc-400">
+            Degree Evaluation System
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
