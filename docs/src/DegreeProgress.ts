@@ -15,5 +15,4 @@ export class DegreeProgress{
     public getRemainingRequirements(): Array<string> {
         throw new Error ("Not implemented yet");
     }
-
 }

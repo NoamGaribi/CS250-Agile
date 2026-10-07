@@ -1,4 +1,4 @@
-import type (DegreeProgress) from "./DegreeProgress"
+import type { DegreeProgress } from "./DegreeProgress"
 
 export class DegreeAudit {
     private fileName: string;
