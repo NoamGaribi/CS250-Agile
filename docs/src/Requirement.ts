@@ -1,5 +1,5 @@
 // Requirement class
-class Requirement {
+export class Requirement {
   private fulfilled: boolean;
   private name: string;
 

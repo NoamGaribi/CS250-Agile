@@ -1,5 +1,6 @@
+import type { Requirement } from "./Requirement";
 // DegreeAudit class
-class DegreeAudit {
+export class DegreeAudit {
   private studentName: string;
   private requirementsList: Requirement[];
 
