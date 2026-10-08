@@ -1,17 +1,26 @@
-import type { DegreeProgress } from "./DegreeProgress"
+// DegreeAudit class
+class DegreeAudit {
+  private studentName: string;
+  private requirementsList: Requirement[];
 
-export class DegreeAudit {
-    private fileName: string;
-    private fileContent: string; 
+  constructor(studentName: string) {
+    this.studentName = studentName;
+    this.requirementsList = [];
+  }
 
-    private extractedProgress: DegreeProgress | null = null;
+  public getRequirement(): Requirement[] {
+    throw new Error("Not implemented");
+  }
 
-    constructor(fileName: string, fileContent: string){
-        this.fileName = fileName;
-        this.fileContent = fileContent;
-    }
+  public getStudentName(): string {
+    throw new Error("Not implemented");
+  }
 
-    public extractProgress(): DegreeProgress {
-        throw new Error("Not implemented yet");
-    }
+  public addRequirement(newRequirement: Requirement): void {
+    throw new Error("Not implemented");
+  }
+
+  public toString(): string {
+    throw new Error("Not implemented");
+  }
 }
