@@ -1,7 +1,7 @@
 Class                       Owner                    Used By 
 
-Student                                              Noam, Ryder
+Student                       Ryder                       Noam, Ryder
 
-Degree Audit                                         Noam, Liliana, Jacobo
+Degree Audit                  Noam                       Noam, Liliana, Jacobo
 
-PlanningPreferences                                  Ryder, Jacobo
+PlanningPreferences           Jacobo                    Ryder, Jacobo
