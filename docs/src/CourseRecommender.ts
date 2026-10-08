@@ -1,5 +1,5 @@
 import type { DegreeProgress } from "./DegreeProgress"
-import type { PlanningPreferences } from "../../ryder-update-planning-preferrences";
+import type { PlanningPreferences } from "./PlanningPreferences";
 interface Course {
   courseCode: string;
   title: string;

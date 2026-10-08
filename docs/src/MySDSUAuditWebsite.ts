@@ -1,5 +1,7 @@
+import type { DegreeAudit } from "./DegreeAudit";
+import type { Requirement } from "./Requirement";
 // MySDSUAuditWebsite class
-class MySDSUAuditWebsite {
+export class MySDSUAuditWebsite {
   private pages: Document[];
   private studentName: string;
   private degreeAudit: DegreeAudit;
