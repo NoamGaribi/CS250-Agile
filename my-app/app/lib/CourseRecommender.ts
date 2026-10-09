@@ -1,12 +1,6 @@
 import type { DegreeProgress } from "./DegreeProgress"
 import type { PlanningPreferences } from "./PlanningPreferences";
-interface Course {
-  courseCode: string;
-  title: string;
-  credits: number;
-  prerequisites: string[];
-}
-
+import type { Course } from "./Course";
 
 export class CourseRecommender {
   private progress: DegreeProgress;
