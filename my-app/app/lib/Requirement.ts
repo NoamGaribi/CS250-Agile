@@ -2,6 +2,7 @@
 export class Requirement {
   private fulfilled: boolean;
   private name: string;
+  private fulfillingCourses: string[];
 
   constructor(name: string) {
     this.name = name;
@@ -20,6 +21,10 @@ export class Requirement {
     throw new Error("Not implemented");
   }
 
+   public getFulfillingCourses(): string[] {
+    throw new Error("Not implemented");
+  }
+  
   public toString(): string {
     throw new Error("Not implemented");
   }
