@@ -1,11 +1,14 @@
 import type { Requirement } from "./Requirement";
+import type {DegreeProgress} from "./DegreeProgress"
 // DegreeAudit class
 export class DegreeAudit {
   private studentName: string;
+  private fileContent: string;
   private requirementsList: Requirement[];
 
-  constructor(studentName: string) {
+  constructor(studentName: string, fileContent: string) {
     this.studentName = studentName;
+    this.fileContent = fileContent;
     this.requirementsList = [];
   }
 
@@ -22,6 +25,10 @@ export class DegreeAudit {
   }
 
   public toString(): string {
+    throw new Error("Not implemented");
+  }
+
+  public extractProgress(): DegreeProgress {
     throw new Error("Not implemented");
   }
 }
