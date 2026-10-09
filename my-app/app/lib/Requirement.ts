@@ -7,6 +7,7 @@ export class Requirement {
   constructor(name: string) {
     this.name = name;
     this.fulfilled = false;
+    this.fulfillingCourses = [];
   }
 
   public getName(name: string): string {
