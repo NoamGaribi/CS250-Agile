@@ -47,31 +47,32 @@ export async function getDegreeProgress(
   const [requirementRows] =
     await pool.query<RequirementRow[]>(
       `
-      SELECT DISTINCT
+       SELECT DISTINCT
         dr.requirement_name
 
-      FROM audit_requirement_results arr
+       FROM audit_requirement_results arr
 
-      JOIN degree_requirements dr
+       JOIN degree_requirements dr
         ON dr.id = arr.requirement_id
 
-      JOIN audit_imports ai
+       JOIN audit_imports ai
         ON ai.id = arr.audit_import_id
 
-      WHERE ai.user_id = ?
+       WHERE ai.user_id = ?
 
         AND ai.id = (
-          SELECT ai2.id
-          FROM audit_imports ai2
-          WHERE ai2.user_id = ?
-          ORDER BY ai2.imported_at DESC
-          LIMIT 1
+            SELECT ai2.id
+            FROM audit_imports ai2
+            WHERE ai2.user_id = ?
+            AND ai2.status = 'confirmed'
+            ORDER BY ai2.imported_at DESC
+            LIMIT 1
         )
 
         AND (
-          COALESCE(arr.remaining_units, 0) > 0
-          OR
-          COALESCE(arr.remaining_course_count, 0) > 0
+         arr.status IN ('not_satisfied', 'in_progress')
+         OR COALESCE(arr.remaining_units, 0) > 0
+         OR COALESCE(arr.remaining_course_count, 0) > 0
         )
 
       ORDER BY dr.requirement_name
