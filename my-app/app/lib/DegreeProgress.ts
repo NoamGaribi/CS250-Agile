@@ -1,18 +1,28 @@
-export class DegreeProgress{
-    private completedCourseCodes: Array<string>; 
-    private remainingRequirements: Array<string>;
+export class DegreeProgress {
+  private completedCourseCodes: string[];
+  private remainingRequirements: string[];
 
-    constructor(completedCourseCodes: Array<string> , remainingCourseRequirements: Array<string>) {
-        this.completedCourseCodes = completedCourseCodes;
-        this.remainingRequirements = remainingCourseRequirements;
-    }
+  constructor(
+    completedCourseCodes: string[],
+    remainingRequirements: string[]
+  ) {
+    this.completedCourseCodes = completedCourseCodes;
+    this.remainingRequirements = remainingRequirements;
+  }
 
-   
-    public getCompletedCourseCodes(): Array<string> {
-        throw new Error("Not implemented yet");
-    }
+  public getCompletedCourseCodes(): string[] {
+    return this.completedCourseCodes;
+  }
 
-    public getRemainingRequirements(): Array<string> {
-        throw new Error ("Not implemented yet");
-    }
+  public getRemainingRequirements(): string[] {
+    return this.remainingRequirements;
+  }
+
+  public hasCompleted(courseCode: string): boolean {
+    return this.completedCourseCodes.includes(courseCode);
+  }
+
+  public needsRequirement(requirementName: string): boolean {
+    return this.remainingRequirements.includes(requirementName);
+  }
 }

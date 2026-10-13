@@ -1,4 +1,4 @@
-import type { DegreeProgress } from "./DegreeProgress"
+import type { DegreeProgress } from "./DegreeProgress";
 import type { PlanningPreferences } from "./PlanningPreferences";
 import type { Course } from "./Course";
 
@@ -15,12 +15,42 @@ export class CourseRecommender {
   }
 
   public recommendCourses(catalog: Course[]): Course[] {
-    // Method stub
-    return [];
+    const recommendations: Course[] = [];
+    let totalCredits = 0;
+
+    for (const course of catalog) {
+      if (!this.isEligible(course)) {
+        continue;
+      }
+
+      const satisfiesNeededRequirement =
+        this.progress
+          .getRemainingRequirements()
+          .some((requirement) =>
+            course.satisfiesRequirement(requirement)
+          );
+
+      if (!satisfiesNeededRequirement) {
+        continue;
+      }
+
+      if (
+        totalCredits + course.getCredits() >
+        this.preferences.getCreditsPerSemester()
+      ) {
+        continue;
+      }
+
+      recommendations.push(course);
+      totalCredits += course.getCredits();
+    }
+
+    return recommendations;
   }
 
   public isEligible(course: Course): boolean {
-    // Method stub
-    return false;
+    return !this.progress.hasCompleted(
+      course.getCourseCode()
+    );
   }
 }

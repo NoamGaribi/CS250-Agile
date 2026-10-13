@@ -4,29 +4,39 @@ export class Requirement {
   private name: string;
   private fulfillingCourses: string[];
 
-  constructor(name: string) {
+  constructor(
+    name: string,
+    fulfilled: boolean = false,
+    fulfillingCourses: string[] = []
+  ) {
     this.name = name;
-    this.fulfilled = false;
-    this.fulfillingCourses = [];
+    this.fulfilled = fulfilled;
+    this.fulfillingCourses = fulfillingCourses;
   }
 
-  public getName(name: string): string {
-    throw new Error("Not implemented");
+  public getName(): string {
+    return this.name;
   }
 
   public isFulfilled(): boolean {
-    throw new Error("Not implemented");
+    return this.fulfilled;
   }
 
-  public makeFulfilled(fulfilled: boolean): boolean {
-    throw new Error("Not implemented");
+  public makeFulfilled(fulfilled: boolean): void {
+    this.fulfilled = fulfilled;
   }
 
-   public getFulfillingCourses(): string[] {
-    throw new Error("Not implemented");
+  public getFulfillingCourses(): string[] {
+    return this.fulfillingCourses;
   }
-  
+
+  public addFulfillingCourse(courseCode: string): void {
+    if (!this.fulfillingCourses.includes(courseCode)) {
+      this.fulfillingCourses.push(courseCode);
+    }
+  }
+
   public toString(): string {
-    throw new Error("Not implemented");
+    return this.name;
   }
 }

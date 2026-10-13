@@ -1,0 +1,27 @@
+repos folder is the bridge between sql and the code.
+That way we can maintain the sql-importing logic here to have clean code
+in the other files.
+
+This is how each file works:
+
+CourseRepository:
+Handles queries related to courses.
+Use it when another file requires information from the database.
+- Ex: 
+	getCoursesOfferedInTerm("Spring 2027")
+	getPrerequisitesForCourse("CS 250")
+	getCoursesForRequirement("Required CS Courses")
+
+DegreeProgressRepository:
+Handles queries related to academic progress.
+Use it when another file requires to know what the student has already
+completed or what they still need
+- Ex:
+	getDegreeProgress(userID)
+
+PreferencesRepository:
+Handles loading, saving student preferences.
+- Ex:
+	getPreferences(userId)
+	savePreferences(userId, credits, interests, days, startTime, endTime)
+- jacobo

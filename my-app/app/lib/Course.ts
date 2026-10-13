@@ -28,4 +28,12 @@ export class Course{
     public getMeetsRequirement(): Requirement[] {
         return this.meetsRequirement;
     }
+
+    // CHECK IF COURSE SATISFIES DEGREE REQUIREMENT
+    // COMPARES THE REQUIREMENT NAME TO THE COURSE'S MEETS REQUIREMENT ARRAY
+    public satisfiesRequirement(requirementName: string): boolean {
+        return this.meetsRequirement.some(
+        (requirement) => requirement.getName() === requirementName
+  );
+}
 }
