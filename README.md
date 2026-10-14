@@ -1,3 +1,5 @@
+![Project Banner](docs/imgs/DEGREE_PLANNER_BANNER.jpg)
+
 # CS250-Agile
 
 Team members:

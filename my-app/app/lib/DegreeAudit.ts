@@ -64,59 +64,75 @@ export class DegreeAudit {
   // FIND COURSES IN AUDIT
   // SEES IF COMPLETED OR IN PROGRESS
   private extractCourses(): void {
-    const lines = this.fileContent.split(/\r?\n/);
+  const lines = this.fileContent.split(/\r?\n/);
 
-    const found = new Map<
-      string,
-      "completed" | "in_progress"
-    >();
+  const found = new Map<
+    string,
+    "completed" | "in_progress"
+  >();
 
-    const coursePattern =
-      /\b([A-Z]{2,5}(?:\s+[A-Z])?)\s*([0-9]{3}[A-Z]?)\b/g;
+  const coursePattern =
+    /\b([A-Z]{2,5}(?:\s+[A-Z])?)\s*([0-9]{3}[A-Z]?)\b/;
 
-    for (const line of lines) {
-      const upperLine = line.toUpperCase();
+  // Common audit terms FA26, SP26, SU26, WI26, etc.
+  const termPattern = /\b(?:FA|SP|SU|WI)\d{2}\b/i;
 
-      let status: "completed" | "in_progress" =
-        "completed";
+  // Grades that indicate an actual attempted/completed course.
+  const gradePattern =
+    /\b(?:A[+-]?|B[+-]?|C[+-]?|D[+-]?|F|CR|NC|P|NP)\b/i;
 
-      if (
-        /\bIP\b/.test(upperLine) ||
-        upperLine.includes("IN PROGRESS")
-      ) {
-        status = "in_progress";
-      }
+  for (const line of lines) {
+    const courseMatch = line.match(coursePattern);
 
-      const matches = line.matchAll(coursePattern);
-
-      for (const match of matches) {
-        const subject = match[1]
-          .trim()
-          .replace(/\s+/g, " ");
-
-        const courseCode =
-          `${subject} ${match[2]}`;
-
-        const existing = found.get(courseCode);
-
-        // IF SAME COURSE APPEARS MULTIPLE TIMES, PREFER IN-PROGRESS STATUS
-        if (
-          existing !== "in_progress" ||
-          status === "in_progress"
-        ) {
-          found.set(courseCode, status);
-        }
-      }
+    if (!courseMatch) {
+      continue;
     }
 
-    this.parsedCourses =
-      Array.from(found.entries()).map(
-        ([courseCode, status]) => ({
-          courseCode,
-          status
-        })
-      );
+    const upperLine = line.toUpperCase();
+
+    const isInProgress =
+      /\bIP\b/.test(upperLine) ||
+      upperLine.includes("IN PROGRESS");
+
+    const hasCompletedEvidence =
+      gradePattern.test(line) ||
+      upperLine.includes("COMPLETED");
+
+    const hasTerm =
+      termPattern.test(line);
+
+    // skips courses that are neither completed nor in progress, and have no term information
+    if (
+      !isInProgress &&
+      !hasCompletedEvidence &&
+      !hasTerm
+    ) {
+      continue;
+    }
+
+    const subject = courseMatch[1]
+      .trim()
+      .replace(/\s+/g, " ");
+
+    const courseCode =
+      `${subject} ${courseMatch[2]}`;
+
+    const status =
+      isInProgress
+        ? "in_progress"
+        : "completed";
+
+    found.set(courseCode, status);
   }
+
+  this.parsedCourses =
+    Array.from(found.entries()).map(
+      ([courseCode, status]) => ({
+        courseCode,
+        status
+      })
+    );
+}
 
   // LOOK FOR KNOWN REQUIREMENTS IN AUDIT TEXT
   // DETERMINE STATUS OF EACH REQUIREMENT
