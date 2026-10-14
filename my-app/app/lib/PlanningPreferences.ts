@@ -18,15 +18,25 @@ export class PlanningPreferences {
     interests: string,
     days: string
   ): void {
-    // Method stub
+    this.creditsPerSemester = credits;
+    this.electiveInterests = interests;
+    this.preferredClassDays = days;
   }
 
-  public savePreferences(): void {
-    // Method stub
+  public getCreditsPerSemester(): number {
+    return this.creditsPerSemester;
   }
 
-  public getPreferences(): PlanningPreferences {
-    return this;
+  public getElectiveInterests(): string {
+    return this.electiveInterests;
   }
+
+  public getPreferredClassDays(): string {
+    return this.preferredClassDays;
+  }
+
+  // SAVE PREFERENCES NOT NEEDED HERE
+  // IT'S HANDLED IN THE REPOSITORY CLASS
+  // ex: PreferencesRepository.savePreferences(...)
 }
 

@@ -1,11 +1,13 @@
-
+import { PlanningPreferences } from "./PlanningPreferences";
+import { Requirement } from "./Requirement";
+import { Course } from "./Course";
 class Roadmap {
-  private studentPreferences: StudentPreferences;
+  private studentPreferences: PlanningPreferences;
   private allCourses: string[];
   private requirementsNeeded: Requirement[];
 
   constructor(
-    studentPreferences: StudentPreferences,
+    studentPreferences: PlanningPreferences,
     allCourses: string[],
     requirementsNeeded: Requirement[]
   ) {
@@ -14,7 +16,7 @@ class Roadmap {
     this.requirementsNeeded = requirementsNeeded;
   }
 
-  public getPreferences(): StudentPreferences {
+  public getPreferences(): PlanningPreferences {
     throw new Error("Not implemented");
   }
 
