@@ -59,6 +59,7 @@ DB_PORT=3306
 DB_USER=your_database_user
 DB_PASSWORD=your_database_password
 DB_NAME=degree_planner
+AUTH_SECRET =  your_auth_secret, generate by "running npx auth secret"
 ```
 
 Those values are used by app/lib/db.ts
