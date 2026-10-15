@@ -63,7 +63,7 @@ export class DegreeAudit {
 
   // FIND COURSES IN AUDIT
   // SEES IF COMPLETED OR IN PROGRESS
-  private extractCourses(): void {
+private extractCourses(): void {
   const lines = this.fileContent.split(/\r?\n/);
 
   const found = new Map<
@@ -71,18 +71,19 @@ export class DegreeAudit {
     "completed" | "in_progress"
   >();
 
-  const coursePattern =
-    /\b([A-Z]{2,5}(?:\s+[A-Z])?)\s*([0-9]{3}[A-Z]?)\b/;
+  // A REAL coursework line must BEGIN with a semester.
+  // Examples:
+  // FA21 CS 150 3.0 B
+  // FA26 CS 210 3.0 IP
+  const courseLinePattern =
+    /^\s*(?:FA|SP|SU|WI)\d{2}\s+([A-Z]{2,5}(?:\s+[A-Z])?)\s*([0-9]{3}[A-Z]?)\b/i;
 
-  // Common audit terms FA26, SP26, SU26, WI26, etc.
-  const termPattern = /\b(?:FA|SP|SU|WI)\d{2}\b/i;
-
-  // Grades that indicate an actual attempted/completed course.
   const gradePattern =
     /\b(?:A[+-]?|B[+-]?|C[+-]?|D[+-]?|F|CR|NC|P|NP)\b/i;
 
   for (const line of lines) {
-    const courseMatch = line.match(coursePattern);
+    const courseMatch =
+      line.match(courseLinePattern);
 
     if (!courseMatch) {
       continue;
@@ -91,36 +92,41 @@ export class DegreeAudit {
     const upperLine = line.toUpperCase();
 
     const isInProgress =
-      /\bIP\b/.test(upperLine) ||
-      upperLine.includes("IN PROGRESS");
+      /\bIP\b/.test(upperLine);
 
-    const hasCompletedEvidence =
-      gradePattern.test(line) ||
-      upperLine.includes("COMPLETED");
+    const hasGrade =
+      gradePattern.test(line);
 
-    const hasTerm =
-      termPattern.test(line);
-
-    // skips courses that are neither completed nor in progress, and have no term information
-    if (
-      !isInProgress &&
-      !hasCompletedEvidence &&
-      !hasTerm
-    ) {
+    // A line must have either an actual grade
+    // or IP to count as coursework.
+    if (!isInProgress && !hasGrade) {
       continue;
     }
 
     const subject = courseMatch[1]
       .trim()
-      .replace(/\s+/g, " ");
+      .replace(/\s+/g, " ")
+      .toUpperCase();
 
     const courseCode =
-      `${subject} ${courseMatch[2]}`;
+      `${subject} ${courseMatch[2].toUpperCase()}`;
 
-    const status =
-      isInProgress
-        ? "in_progress"
-        : "completed";
+    const status:
+      "completed" | "in_progress" =
+        isInProgress
+          ? "in_progress"
+          : "completed";
+
+    // If the same course appears more than once,
+    // in-progress should not overwrite a completed attempt.
+    const existing = found.get(courseCode);
+
+    if (
+      existing === "completed" &&
+      status === "in_progress"
+    ) {
+      continue;
+    }
 
     found.set(courseCode, status);
   }
@@ -132,8 +138,8 @@ export class DegreeAudit {
         status
       })
     );
-}
-
+ }
+ 
   // LOOK FOR KNOWN REQUIREMENTS IN AUDIT TEXT
   // DETERMINE STATUS OF EACH REQUIREMENT
   // UNCLEAR = "UNKNOWN" STATUS
