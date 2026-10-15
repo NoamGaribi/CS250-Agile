@@ -12,6 +12,8 @@ export type AuditRequirementStatus =
 export interface ParsedAuditCourse {
   courseCode: string;
   status: "completed" | "in_progress";
+  termLabel: string;
+  grade: string | null;
 }
 
 export interface ParsedAuditRequirement {
@@ -36,26 +38,21 @@ export class DegreeAudit {
     this.parsedRequirements = [];
   }
 
-
   public getRequirement(): Requirement[] {
     return this.requirementsList;
   }
-
 
   public getStudentName(): string {
     return this.studentName;
   }
 
-
   public addRequirement(newRequirement: Requirement): void {
     this.requirementsList.push(newRequirement);
   }
 
-
   public getParsedCourses(): ParsedAuditCourse[] {
     return this.parsedCourses;
   }
-
 
   public getParsedRequirements(): ParsedAuditRequirement[] {
     return this.parsedRequirements;
@@ -63,95 +60,125 @@ export class DegreeAudit {
 
   // FIND COURSES IN AUDIT
   // SEES IF COMPLETED OR IN PROGRESS
-private extractCourses(): void {
-  const lines = this.fileContent.split(/\r?\n/);
+  // ALSO SAVES TERM AND GRADE
+  private extractCourses(): void {
+    const lines =
+      this.fileContent.split(/\r?\n/);
 
-  const found = new Map<
-    string,
-    "completed" | "in_progress"
-  >();
+    const found =
+      new Map<string, ParsedAuditCourse>();
 
-  // A REAL coursework line must BEGIN with a semester.
-  // Examples:
-  // FA21 CS 150 3.0 B
-  // FA26 CS 210 3.0 IP
-  const courseLinePattern =
-    /^\s*(?:FA|SP|SU|WI)\d{2}\s+([A-Z]{2,5}(?:\s+[A-Z])?)\s*([0-9]{3}[A-Z]?)\b/i;
+    // A REAL coursework line must BEGIN with a semester.
+    //
+    // Examples:
+    // FA21 CS 150 3.0 B
+    // FA26 CS 210 3.0 IP
+    //
+    // Capture groups:
+    // 1 = term
+    // 2 = subject
+    // 3 = course number
+    const courseLinePattern =
+      /^\s*((?:FA|SP|SU|WI)\d{2})\s+([A-Z]{2,5}(?:\s+[A-Z])?)\s*([0-9]{3}[A-Z]?)\b/i;
 
-  const gradePattern =
-    /\b(?:A[+-]?|B[+-]?|C[+-]?|D[+-]?|F|CR|NC|P|NP)\b/i;
+    // Grades that indicate an actual attempted/completed course.
+    const gradePattern =
+      /\b(?:A[+-]?|B[+-]?|C[+-]?|D[+-]?|F|CR|NC|P|NP)\b/i;
 
-  for (const line of lines) {
-    const courseMatch =
-      line.match(courseLinePattern);
+    for (const line of lines) {
+      const courseMatch =
+        line.match(courseLinePattern);
 
-    if (!courseMatch) {
-      continue;
-    }
+      if (!courseMatch) {
+        continue;
+      }
 
-    const upperLine = line.toUpperCase();
+      const upperLine =
+        line.toUpperCase();
 
-    const isInProgress =
-      /\bIP\b/.test(upperLine);
+      const isInProgress =
+        /\bIP\b/.test(upperLine);
 
-    const hasGrade =
-      gradePattern.test(line);
+      const gradeMatch =
+        line.match(gradePattern);
 
-    // A line must have either an actual grade
-    // or IP to count as coursework.
-    if (!isInProgress && !hasGrade) {
-      continue;
-    }
+      // A line must have either:
+      // - IP
+      // - or an actual grade
+      //
+      // This prevents "Select from" course options
+      // from being imported as completed courses.
+      if (
+        !isInProgress &&
+        !gradeMatch
+      ) {
+        continue;
+      }
 
-    const subject = courseMatch[1]
-      .trim()
-      .replace(/\s+/g, " ")
-      .toUpperCase();
+      const termLabel =
+        courseMatch[1].toUpperCase();
 
-    const courseCode =
-      `${subject} ${courseMatch[2].toUpperCase()}`;
+      const subject =
+        courseMatch[2]
+          .trim()
+          .replace(/\s+/g, " ")
+          .toUpperCase();
 
-    const status:
-      "completed" | "in_progress" =
+      const courseCode =
+        `${subject} ${courseMatch[3].toUpperCase()}`;
+
+      const status:
+        "completed" | "in_progress" =
+          isInProgress
+            ? "in_progress"
+            : "completed";
+
+      const grade =
         isInProgress
-          ? "in_progress"
-          : "completed";
+          ? null
+          : gradeMatch?.[0].toUpperCase() ?? null;
 
-    // If the same course appears more than once,
-    // in-progress should not overwrite a completed attempt.
-    const existing = found.get(courseCode);
+      const existing =
+        found.get(courseCode);
 
-    if (
-      existing === "completed" &&
-      status === "in_progress"
-    ) {
-      continue;
+      // If the same course appears more than once,
+      // do not let an in-progress entry replace
+      // a completed entry.
+      if (
+        existing?.status === "completed" &&
+        status === "in_progress"
+      ) {
+        continue;
+      }
+
+      found.set(courseCode, {
+        courseCode,
+        status,
+        termLabel,
+        grade
+      });
     }
 
-    found.set(courseCode, status);
+    this.parsedCourses =
+      Array.from(found.values());
   }
 
-  this.parsedCourses =
-    Array.from(found.entries()).map(
-      ([courseCode, status]) => ({
-        courseCode,
-        status
-      })
-    );
- }
- 
   // LOOK FOR KNOWN REQUIREMENTS IN AUDIT TEXT
   // DETERMINE STATUS OF EACH REQUIREMENT
   // UNCLEAR = "UNKNOWN" STATUS
   public extractRequirements(
     knownRequirementNames: string[]
   ): void {
-    const auditText = this.fileContent.toLowerCase();
+    const auditText =
+      this.fileContent.toLowerCase();
 
     this.parsedRequirements = [];
     this.requirementsList = [];
 
-    for (const requirementName of knownRequirementNames) {
+    for (
+      const requirementName
+      of knownRequirementNames
+    ) {
       const searchName =
         requirementName.toLowerCase();
 
@@ -162,29 +189,43 @@ private extractCourses(): void {
         continue;
       }
 
-      // LOOKS FOR "NEEDS", "NOT SATISFIED", "IN PROGRESS", "IP", "SATISFIED", OR "COMPLETE"
-      const start = Math.max(0, index - 100);
-      const end = Math.min(
-        auditText.length,
-        index + requirementName.length + 300
-      );
+      // LOOKS FOR:
+      // "NEEDS"
+      // "NOT SATISFIED"
+      // "IN PROGRESS"
+      // "IP"
+      // "SATISFIED"
+      // "COMPLETE"
+      const start =
+        Math.max(0, index - 100);
+
+      const end =
+        Math.min(
+          auditText.length,
+          index +
+            requirementName.length +
+            300
+        );
 
       const nearbyText =
         auditText.slice(start, end);
 
-      let status: AuditRequirementStatus =
-        "unknown";
+      let status:
+        AuditRequirementStatus =
+          "unknown";
 
       if (
         nearbyText.includes("needs") ||
         nearbyText.includes("not satisfied")
       ) {
         status = "not_satisfied";
+
       } else if (
         nearbyText.includes("in progress") ||
         /\bip\b/.test(nearbyText)
       ) {
         status = "in_progress";
+
       } else if (
         nearbyText.includes("satisfied") ||
         nearbyText.includes("complete")
@@ -204,10 +245,11 @@ private extractCourses(): void {
         status === "satisfied"
       );
 
-      this.requirementsList.push(requirement);
+      this.requirementsList.push(
+        requirement
+      );
     }
   }
-
 
   public extractProgress(): DegreeProgress {
     this.extractCourses();
@@ -239,7 +281,6 @@ private extractCourses(): void {
       remainingRequirements
     );
   }
-
 
   public toString(): string {
     return `Degree Audit for ${this.studentName}`;

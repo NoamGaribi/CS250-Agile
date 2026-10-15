@@ -18,25 +18,27 @@ interface CourseRow extends RowDataPacket {
   course_code: string;
 }
 
+
 // GETS ALL REQUIREMENTS FOR A DEGREE
 export async function getRequirementNamesForDegree(
   degreeId: number
 ): Promise<string[]> {
 
-  const [rows] = await pool.query<RequirementRow[]>(
-    `
-    SELECT
-      id,
-      requirement_name
+  const [rows] =
+    await pool.query<RequirementRow[]>(
+      `
+      SELECT
+        id,
+        requirement_name
 
-    FROM degree_requirements
+      FROM degree_requirements
 
-    WHERE degree_id = ?
+      WHERE degree_id = ?
 
-    ORDER BY requirement_name
-    `,
-    [degreeId]
-  );
+      ORDER BY requirement_name
+      `,
+      [degreeId]
+    );
 
   return rows.map(
     (row) => row.requirement_name
@@ -52,8 +54,8 @@ export async function getRequirementNamesForDegree(
  * as confirmed academic data.
  */
 
-// Saves a student's degree audit to the database
-// Returns the ID of the new audit import
+// SAVES A STUDENT'S DEGREE AUDIT TO THE DATABASE
+// RETURNS THE ID OF THE NEW AUDIT IMPORT
 export async function saveDegreeAudit(
   userId: number,
   degreeId: number,
@@ -69,7 +71,7 @@ export async function saveDegreeAudit(
 
 
     // -------------------------------------------------
-    // GET DEGREES REQUIREMENTS FROM DATABASE
+    // GET DEGREE REQUIREMENTS FROM DATABASE
     // -------------------------------------------------
 
     const [requirementRows] =
@@ -156,6 +158,7 @@ export async function saveDegreeAudit(
           [parsedCourse.courseCode]
         );
 
+
       // COURSE_ID CAN BE NULL IF THE COURSE IS NOT IN THE CATALOG.
       const courseId =
         courseRows.length > 0
@@ -171,17 +174,21 @@ export async function saveDegreeAudit(
           course_code,
           status,
           course_id,
-          audit_import_id
+          audit_import_id,
+          term_label,
+          grade
         )
 
-        VALUES (?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         `,
         [
           userId,
           parsedCourse.courseCode,
           parsedCourse.status,
           courseId,
-          auditImportId
+          auditImportId,
+          parsedCourse.termLabel,
+          parsedCourse.grade
         ]
       );
     }
@@ -243,5 +250,6 @@ export async function saveDegreeAudit(
   } finally {
 
     connection.release();
+
   }
 }
