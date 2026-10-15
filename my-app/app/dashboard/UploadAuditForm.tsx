@@ -5,7 +5,7 @@ import { uploadAudit, type UploadState } from "./action";
 
 const initialState: UploadState = { status: "idle", message: "" };
 
-// Shows the chosen file, a loading state, and the result
+// Shows the chosen file, loading state, and the result
 export default function UploadAuditForm() {
   const [state, formAction, pending] = useActionState(uploadAudit, initialState);
   const [fileName, setFileName] = useState<string | null>(null);
