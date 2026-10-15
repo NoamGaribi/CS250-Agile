@@ -120,20 +120,6 @@ export default async function Home({ searchParams }: HomeProps) {
             />
           </div>
 
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 text-sm text-zinc-600">
-              <input type="checkbox" className="accent-red-600" />
-              Remember me
-            </label>
-
-            <button
-              type="button"
-              className="text-sm font-medium text-red-600 hover:underline"
-            >
-              Forgot password?
-            </button>
-          </div>
-
           <button
             type="submit"
             className="w-full rounded-lg bg-red-600 py-3 font-medium text-white transition hover:bg-red-700"

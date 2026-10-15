@@ -1,6 +1,10 @@
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import UploadAuditForm from "./UploadAuditForm";
+
+// Shared look for the three dashboard cards
+const cardClass =
+  "flex flex-col items-start rounded-2xl border border-red-100 bg-white p-6 text-left shadow-lg transition";
 
 // Dashboard Page Component
 export default async function Dashboard() {
@@ -12,50 +16,55 @@ export default async function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-red-50">
-      {/* Top Bar */}
-      <header className="border-b border-red-100 bg-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-600 text-lg font-bold text-white">
-              DE
-            </div>
-            <span className="text-lg font-semibold text-zinc-900">
-              Degree Evaluation
-            </span>
-          </div>
+    <>
+      <h1 className="text-3xl font-semibold text-zinc-900">Dashboard</h1>
+      <p className="mt-2 text-sm text-zinc-500">
+        What would you like to do?
+      </p>
 
-          <div className="flex items-center gap-4">
-            <span className="hidden text-sm text-zinc-500 sm:inline">
-              {session.user?.email}
-            </span>
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/" });
-              }}
-            >
-              <button
-                type="submit"
-                className="rounded-lg border border-red-600 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
-              >
-                Sign Out
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
+      <div className="mt-8 grid gap-6 sm:grid-cols-3">
+        {/* Set User Preferences (not wired up yet) */}
+        <button type="button" className={`${cardClass} hover:border-red-300`}>
+          <span className="text-lg font-semibold text-zinc-900">
+            Set User Preferences
+          </span>
+          <span className="mt-2 text-sm text-zinc-500">
+            Choose how you want your courses planned.
+          </span>
+          <span className="mt-4 rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-500">
+            Coming soon
+          </span>
+        </button>
 
-      {/* Main Content */}
-      <main className="mx-auto max-w-5xl px-4 py-10">
-        <h1 className="text-3xl font-semibold text-zinc-900">Dashboard</h1>
-        <p className="mt-2 text-sm text-zinc-500">
-          Upload a file to get started with your degree evaluation.
-        </p>
+        {/* Generate Custom Degree Roadmap (not wired up yet) */}
+        <button type="button" className={`${cardClass} hover:border-red-300`}>
+          <span className="text-lg font-semibold text-zinc-900">
+            Generate Custom Degree Roadmap
+          </span>
+          <span className="mt-2 text-sm text-zinc-500">
+            Build a semester-by-semester plan to graduation.
+          </span>
+          <span className="mt-4 rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-500">
+            Coming soon
+          </span>
+        </button>
 
-        {/* File upload: posts to the uploadAudit server action */}
-        <UploadAuditForm />
-      </main>
-    </div>
+        {/* Upload Degree Audit: goes to the upload page */}
+        <Link
+          href="/dashboard/upload"
+          className={`${cardClass} hover:border-red-400 hover:shadow-xl`}
+        >
+          <span className="text-lg font-semibold text-zinc-900">
+            Upload Degree Audit
+          </span>
+          <span className="mt-2 text-sm text-zinc-500">
+            Import your audit so we can track your progress.
+          </span>
+          <span className="mt-4 rounded-full bg-red-600 px-3 py-1 text-xs font-medium text-white">
+            Upload &rarr;
+          </span>
+        </Link>
+      </div>
+    </>
   );
 }
