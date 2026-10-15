@@ -20,18 +20,29 @@ export async function uploadAudit(prevState: UploadState, formData : FormData): 
         return { status: "error", message: "Please choose a file before uploading." };
     }
 
-    let fileContent: string;
-    if (file.type == "application/pdf") {
-        const pdf = await getDocumentProxy(new Uint8Array(await file.arrayBuffer()));
-        const { text } = await extractText(pdf, {mergePages: true});
-        fileContent = text;
-    } else {
-       fileContent = await file.text(); 
-    }
-    const audit = new DegreeAudit(session.user.name ?? "", fileContent);
-
-    const degreeId = 1;
+    const isPdf = file.type === "application/pdf";
+    const isTxt = file.name.toLowerCase().endsWith(".txt");
+    if (!isPdf && !isTxt) {
+        return {
+            status: "error",
+            message: "Please upload a PDF or .txt file."
+            };
+        }
+    
     try {
+
+        let fileContent: string;
+        if (isPdf) {
+            const pdf = await getDocumentProxy(new Uint8Array(await file.arrayBuffer()));
+            const { text } = await extractText(pdf, {mergePages: true});
+            fileContent = text;
+           } else {
+            fileContent = await file.text(); 
+           }
+           
+        const audit = new DegreeAudit(session.user.name ?? "", fileContent);
+        const degreeId = 1;
+
         const auditImportId = await saveDegreeAudit (
             Number(session.user.id),
             degreeId,
