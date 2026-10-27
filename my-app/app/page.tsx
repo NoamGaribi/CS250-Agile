@@ -1,4 +1,4 @@
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -10,6 +10,10 @@ type HomeProps = {
 };
 
 export default async function Home({ searchParams }: HomeProps) {
+  const session = await auth();
+  if (session?.user) {
+    redirect("/dashboard");
+  }
   const { error } = await searchParams;
 
   const errorMessage =
