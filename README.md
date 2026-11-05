@@ -8,6 +8,9 @@ Team members:
 - Ryder Garcia
 - Noam Garibi
 
+Inherited Group members:
+Sunny Suarez
+
 ## Tech Stack
 - React
 - Next.js
