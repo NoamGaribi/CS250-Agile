@@ -10,10 +10,10 @@ Fill this in **after** everyone's work is merged. One row per requirement.
 | Requirement ID | From Part 5 | Owner | Test case IDs | Result | GitHub Issue # |
 |---|---|---|---|---|---|
 | REQ-MG-01 *(example)* | CR-3 | Maria | MG-01, MG-02 | 1 Pass, 1 Fail | #12 |
-| NFR-YD-01 | CR-4 | Yuno | YD-02 | Pass | |
-| REQ-YD-01 | CR-5 | Yuno | YD-01 | Pass | |
-| REQ-YD-02 | NEW | Yuno | YD-03 | Pass | |
-| REQ-YD-03 | NEW | Yuno | YD-04 | Pass | |
+| NFR-YD-01 | CR-4 | Yuno | YD-02 | Pass | #81 |
+| REQ-YD-01 | CR-5 | Yuno | YD-01 | Pass | #73 |
+| REQ-YD-02 | NEW | Yuno | YD-03 | Pass | #82 |
+| REQ-YD-03 | NEW | Yuno | YD-04 | Pass | #83 |
 | | | | | | |
 | | | | | | |
 | | | | | | |
@@ -29,6 +29,8 @@ Fill this in **after** everyone's work is merged. One row per requirement.
 ## Gaps
 
 List any requirement with no test, any test with no requirement, and any Part 5 requirement or Part 6 test that nobody brought over. Write "None" if there are none.
+
+None 
 
 -
 
