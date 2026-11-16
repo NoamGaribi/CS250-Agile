@@ -1,6 +1,6 @@
 # Traceability Matrix
 
-**Team number:** [XX]
+**Team number:** [09]
 **Filled in by (captain):** [name]
 
 Fill this in **after** everyone's work is merged. One row per requirement.
@@ -10,10 +10,10 @@ Fill this in **after** everyone's work is merged. One row per requirement.
 | Requirement ID | From Part 5 | Owner | Test case IDs | Result | GitHub Issue # |
 |---|---|---|---|---|---|
 | REQ-MG-01 *(example)* | CR-3 | Maria | MG-01, MG-02 | 1 Pass, 1 Fail | #12 |
-| | | | | | |
-| | | | | | |
-| | | | | | |
-| | | | | | |
+| NFR-YD-01 | CR-4 | Yuno | YD-02 | Pass | |
+| REQ-YD-01 | CR-5 | Yuno | YD-01 | Pass | |
+| REQ-YD-02 | NEW | Yuno | YD-03 | Pass | |
+| REQ-YD-03 | NEW | Yuno | YD-04 | Pass | |
 | | | | | | |
 | | | | | | |
 | | | | | | |
@@ -41,10 +41,10 @@ Put a Test ID next to each type. Team minimum: all 7.
 | Unit | |
 | Integration | |
 | System (E2E) | |
-| Acceptance | |
-| Boundary Value | |
-| Negative | |
-| Security | |
+| Acceptance | G-YD-01 |
+| Boundary Value | NFR-YD-01 |
+| Negative | REQ-YD-01 |
+| Security | REQ-YD-02 |
 
 ## Validation Findings
 
@@ -62,15 +62,15 @@ A Validation finding means the system does what the requirement says, but the re
 
 | | Count |
 |---|---|
-| Part 5 requirements carried over | |
-| New requirements added | |
+| Part 5 requirements carried over | Yuno: 2 |
+| New requirements added | Yuno: 2 |
 | Part 6 tests upgraded (out of 3) | |
-| Total requirements | |
-| Total test cases | |
-| Passed | |
-| Failed | |
-| Issues opened | |
-| Critical issues | |
+| Total requirements | Yuno: 4 |
+| Total test cases | Yuno: 4 |
+| Passed | Yuno: 4 |
+| Failed | Yuno: 0 |
+| Issues opened | Yuno: 0 |
+| Critical issues | Yuno: 0 |
 
 **In one sentence, would you ship this system today? Why or why not?**
 

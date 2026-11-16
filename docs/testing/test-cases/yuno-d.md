@@ -91,7 +91,7 @@ HOW TO USE THIS FILE
 **From Part 6:** New
 **Written by:** Yuno Dela Pena
 **Title:** User uploads a valid audit and sees confirmation screen
-**Traces to:** G-YD-01
+**Traces to:** REQ-YD-03
 **Test type:** Acceptance
 **Preconditions:** Create account using 'mdelapena7203@sdsu.edu' and 'cs250agile' and sign-in, run localhost:3000, have appropriate file
 **Test data:** Degree audit file less than or equal to 5MB
