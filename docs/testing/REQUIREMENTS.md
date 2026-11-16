@@ -8,7 +8,7 @@
 | Area of the system | Owner | ID prefix |
 |---|---|---|
 | Accounts and Login| Sunny | SS |
-| Audit upload|Yuno| YD|
+| Audit Upload | Yuno | YD |
 | Audit parsing| Jania| JL|
 | Database and roadmap| Alexa| AQ|
 
@@ -49,27 +49,27 @@ RULES
 
 ---
 
-## Section: [Your Area] ([Your Name])
+## Section: Audit Upload (Yuno D)
 
 ### Stakeholder Goals
 
 | ID | Stakeholder | Goal |
 |---|---|---|
-| | | |
+| G-YD-01 | SDSU Students | Be able to upload their audit to be analyzed for their system map |
 
 ### Functional Requirements
 
 | ID | Requirement | Status | From Part 5 |
 |---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
+| REQ-YD-01 | The system shall reject non-text and non-PDF file formats submitted on the audit upload form. | Suspected Bug | CR-05 |
+| REQ-YD-02 | The system shall redirect the user to the login if they are not signed in from teh audit upload page. | Confirmed | New |
+| REQ-YD-03 | The system shall grey-out the "Upload Audit" button until a file is selected and while it uploads the file. | Confirmed | New |
 
 ### Non-Functional Requirements
 
 | ID | Requirement | Status | From Part 5 |
 |---|---|---|---|
-| | | | |
+| NFR-YD-01 | The system shall reject audit file uploads larger than 5MB. | Suspected Bug | CR-04 |
 
 ---
 
