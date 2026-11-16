@@ -73,27 +73,27 @@ RULES
 
 ---
 
-## Section: [Your Area] ([Your Name])
+## Section: Audit Parsing (Jania Little)
 
 ### Stakeholder Goals
 
 | ID | Stakeholder | Goal |
 |---|---|---|
-| | | |
+| G-JL-01 | Student / User | Ensure degree audit accurately tracks course completions and supports up to 5-letter course subjects while enforcing file upload safety and size limits. |
 
 ### Functional Requirements
 
 | ID | Requirement | Status | From Part 5 |
 |---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
+| REQ-JL-01 | The system shall list a course as completed only when its grade is passing. | Suspected bug | CR-6 |
+| REQ-JL-02 | The system shall recognize course subjects of up to 5 letters. | Unconfirmed | CR-7 |
+| REQ-JL-03 | The system shall accept only PDF or text files on the audit upload form. | Suspected bug | CR-5 |
 
 ### Non-Functional Requirements
 
 | ID | Requirement | Status | From Part 5 |
 |---|---|---|---|
-| | | | |
+| NFR-JL-01 | The system shall reject audit file uploads larger than 5MB. | Unconfirmed | CR-4 |
 
 ---
 
