@@ -14,11 +14,11 @@ Fill this in **after** everyone's work is merged. One row per requirement.
 | REQ-YD-01 | CR-5 | Yuno | YD-01 | Pass | #73 |
 | REQ-YD-02 | NEW | Yuno | YD-03 | Pass | #82 |
 | REQ-YD-03 | NEW | Yuno | YD-04 | Pass | #83 |
-| | | | | | |
-| | | | | | |
-| | | | | | |
-| | | | | | |
-| | | | | | |
+|REQ-SS-01|CR-1 | Sunny|SS-01 | Pass|None |
+| REQ-SS-02| CR-3| Sunny| SS-02| Pass| None|
+| REQ-SS-03| New| Sunny| SS-03| Pass| None|
+| NFR-SS-01| CR-2| Sunny| SS-04| Pass| None|
+| G-SS-01| New|Sunny | SS-05| Pass| None|
 | | | | | | |
 | | | | | | |
 | | | | | | |
@@ -42,7 +42,7 @@ Put a Test ID next to each type. Team minimum: all 7.
 |---|---|
 | Unit | |
 | Integration | |
-| System (E2E) | |
+| System (E2E) |REQ-SS-03 |
 | Acceptance | G-YD-01 |
 | Boundary Value | NFR-YD-01 |
 | Negative | REQ-YD-01 |
@@ -64,16 +64,16 @@ A Validation finding means the system does what the requirement says, but the re
 
 | | Count |
 |---|---|
-| Part 5 requirements carried over | Yuno: 2 |
-| New requirements added | Yuno: 2 |
+| Part 5 requirements carried over | Yuno: 2 | Sunny: 3 |
+| New requirements added | Yuno: 2 | Sunny: 1 |
 | Part 6 tests upgraded (out of 3) | |
-| Total requirements | Yuno: 4 |
-| Total test cases | Yuno: 4 |
-| Passed | Yuno: 4 |
-| Failed | Yuno: 0 |
-| Issues opened | Yuno: 0 |
-| Critical issues | Yuno: 0 |
+| Total requirements | Yuno: 4 | Sunny: 4 |
+| Total test cases | Yuno: 4 | Sunny: 5 |
+| Passed | Yuno: 4 | Sunny: 5 |
+| Failed | Yuno: 0 | Sunny: 0 |
+| Issues opened | Yuno: 0 | Sunny: 0 |
+| Critical issues | Yuno: 0 | Sunny: 0 |
 
 **In one sentence, would you ship this system today? Why or why not?**
-
+I would not ship this system today because it lacks a few features that are imperative to this systems purpose.
 >
