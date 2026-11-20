@@ -23,9 +23,11 @@ export default async function SignUp({ searchParams }: SignUpProps) {
           ? "Password must be at least 8 characters."
           : error === "EmailExists"
             ? "An account with this email already exists."
-            : error === "SignupError"
-              ? "We could not create your account. Please try again."
-              : null;
+            : error === "EmailTooLong"
+              ? "Email must be 255 characters or less."
+              : error === "SignupError"
+                ? "We could not create your account. Please try again."
+                : null;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-red-50 px-4">
@@ -68,6 +70,10 @@ export default async function SignUp({ searchParams }: SignUpProps) {
 
             if (password.length < 8) {
               redirect("/signup?error=PasswordTooShort");
+            }
+
+            if (email.length > 255) {
+              redirect("/signup?error=EmailTooLong");
             }
 
             const nameParts = fullName.split(/\s+/);
