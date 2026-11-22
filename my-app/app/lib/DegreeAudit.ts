@@ -1,6 +1,6 @@
 import { Requirement } from "./Requirement";
 import { DegreeProgress } from "./DegreeProgress";
-
+const FAILING_GRADES = ["F", "NC", "NP"];
 // DegreeAudit class
 
 export type AuditRequirementStatus =
@@ -11,7 +11,7 @@ export type AuditRequirementStatus =
 
 export interface ParsedAuditCourse {
   courseCode: string;
-  status: "completed" | "in_progress";
+  status: "completed" | "in_progress" | "failed";
   termLabel: string;
   grade: string | null;
 }
@@ -115,7 +115,7 @@ export class DegreeAudit {
         continue;
       }
 
-      const termLabel =
+          const termLabel =
         courseMatch[1].toUpperCase();
 
       const subject =
@@ -127,26 +127,31 @@ export class DegreeAudit {
       const courseCode =
         `${subject} ${courseMatch[3].toUpperCase()}`;
 
-      const status:
-        "completed" | "in_progress" =
-          isInProgress
-            ? "in_progress"
-            : "completed";
-
       const grade =
         isInProgress
           ? null
           : gradeMatch?.[0].toUpperCase() ?? null;
 
+      // A failing grade means the course was attempted but NOT completed.
+      let status: "completed" | "in_progress" | "failed";
+
+      if (isInProgress) {
+        status = "in_progress";
+      } else if (grade !== null && FAILING_GRADES.includes(grade)) {
+        status = "failed";
+      } else {
+        status = "completed";
+      }
+
       const existing =
         found.get(courseCode);
 
       // If the same course appears more than once,
-      // do not let an in-progress entry replace
-      // a completed entry.
+      // do not let an in-progress or failed entry
+      // replace a completed entry.
       if (
         existing?.status === "completed" &&
-        status === "in_progress"
+        status !== "completed"
       ) {
         continue;
       }
