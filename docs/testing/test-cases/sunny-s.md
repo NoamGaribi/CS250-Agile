@@ -122,3 +122,24 @@
 **GitHub Issue:**
 
 ---
+
+**Test ID:** SS-06
+**From Part 6:** New
+**Written by:** Sunny Suarez
+**Title:** Signup with a 300-character email shows a generic error instead of a length validation message.
+
+**Steps:**
+1. Run the app (npm run dev in my-app) and open localhost:3000/signup.
+2. Enter any name, a 300-character email (300 letters "a" plus @example.com), and the password Password! in both password fields.
+3. Click Create Account.
+
+**Expected result:** A specific message such as "Email must be 254 characters or fewer", and no account created.
+**Actual result:** The page reloads at /signup?error=SignupError and shows "We could not create your account. Please try again." The terminal shows ER_DATA_TOO_LONG (errno 1406, "Data too long for column 'error'"). No account is created, but the message gives no hint that the email is the problem.
+**Status:** Fail
+**Environment:** MacBook Air, macOS, branch main
+**Severity:** Low. No data is lost and the app keeps running
+**Priority:** Low. Few students have emails this long, but the message is misleading.
+**V or V:** Verification
+**GitHub Issue:**
+
+---
