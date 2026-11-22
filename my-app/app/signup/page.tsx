@@ -25,9 +25,11 @@ export default async function SignUp({ searchParams }: SignUpProps) {
             ? "An account with this email already exists."
             : error === "EmailTooLong"
               ? "Email must be 255 characters or less."
-              : error === "SignupError"
-                ? "We could not create your account. Please try again."
-                : null;
+              : error === "NameTooLong"
+                ? "Name must be 100 characters or less."
+                : error === "SignupError"
+                  ? "We could not create your account. Please try again."
+                  : null;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-red-50 px-4">
@@ -83,6 +85,10 @@ export default async function SignUp({ searchParams }: SignUpProps) {
                 ? nameParts.slice(1).join(" ")
                 : null;
 
+                if (fullName.length > 100) {
+              redirect("/signup?error=NameTooLong");
+            }
+            
             const passwordHash = await bcrypt.hash(password, 12);
 
             try {
