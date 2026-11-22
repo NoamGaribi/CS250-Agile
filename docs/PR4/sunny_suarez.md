@@ -3,7 +3,7 @@
 ## Bug Fix 1: Signup with a 300-character email shows a generic error
 
 - **Issue:** https://github.com/NoamGaribi/CS250-Agile/issues/89
-- **Pull Request:** https://github.com/NoamGaribi/CS250-Agile/pull/90
+- **Pull Request:** https://github.com/NoamGaribi/CS250-Agile/pull/92
 - **Files changed:** 'my-app/app/signup/page.tsx'
 
 **Before** (terminal shows 'ER_DATA_TOO_LONG' for column 'email', page shows "We could not create your account. Please try again."):
@@ -30,11 +30,11 @@
 
 **Before** (terminal shows 'ER_DATA_TOO_LONG' for column 'name', page shows "We could not create your account. Please try again."):
 
-![Issue 90 before](screenshots/sunny_suarez_issue90_before.png)
+![Issue 92 before](screenshots/sunny_suarez_issue92_before.png)
 
 **After** (page shows "Name must be 100 characters or less." and the terminal shows no database error):
 
-![Issue 90 after](screenshots/sunny_suarez_issue90_after.png)
+![Issue 92 after](screenshots/sunny_suarez_issue92_after.png)
 
 **Code bug or test bug:** Code bug. The terminal showed 'ER_DATA_TOO_LONG' for the 'name' column, and the singup code inserted the name without checking its length, the same root cause as Issue 89 in a different field.
 
