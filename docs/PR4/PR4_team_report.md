@@ -46,3 +46,8 @@ Tests still failing after freeze:
 ## 6. Sprint Summary
 
 We ran the System Map Part 6 tests and our new edge-case tests against the inherited degree planner app. We found real bugs, including a course with an F grade counted as completed and a signup crashing on over-long input. We documented them as GitHub issues and fixed them through approved pull requests.
+| JL-01:  | Code bug | [Issue link] | Major | High | Jania Little | [Fixed / Open] |
+| SS-06: Signup with a 300-character email shows a generic error | Code bug | https://github.com/NoamGaribi/CS250-Agile/issues/89 | Low | Low | Sunny Suarez | Fixed |
+| SS-07: Signup with a 300-character name shows a generic error | Code bug | https://github.com/NoamGaribi/CS250-Agile/issues/92 | Low | Low | Sunny Suarez | Fixed |
+| [Yuno's failing test] | [bucket] | [Issue link] | [sev] | [prio] | Yuno Dela Pena | [status] |
+|  |  |  |  |  |  |  |
