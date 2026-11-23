@@ -14,7 +14,7 @@
 ---
 
 **Issue Link:** https://github.com/NoamGaribi/CS250-Agile/issues/104
-**Pull Request:** 
+**Pull Request:** https://github.com/NoamGaribi/CS250-Agile/pull/105
 
 **Before:** ![Before101](screenshots/yuno_delapena_issue104_before.png)
 
