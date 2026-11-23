@@ -21,7 +21,7 @@ Fill this in **after** everyone's work is merged. One row per requirement.
 | G-SS-01| New|Sunny | SS-05| Pass| None|
 | REQ-YD-04 | New | Yuno | YD-10 | Pass | None |
 | REQ-YD-05 | New | Yuno | YD-11 | Fail | #101 |
-| | | | | | |
+| REQ-YD-05 | New | Yuno | YD-12 | Fail | #104 |
 | | | | | | |
 | | | | | | |
 | | | | | | |
