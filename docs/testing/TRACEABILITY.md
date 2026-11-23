@@ -10,16 +10,17 @@ Fill this in **after** everyone's work is merged. One row per requirement.
 | Requirement ID | From Part 5 | Owner | Test case IDs | Result | GitHub Issue # |
 |---|---|---|---|---|---|
 | REQ-MG-01 *(example)* | CR-3 | Maria | MG-01, MG-02 | 1 Pass, 1 Fail | #12 |
-| NFR-YD-01 | CR-4 | Yuno | YD-02 | Pass | #81 |
-| REQ-YD-01 | CR-5 | Yuno | YD-01 | Pass | #73 |
-| REQ-YD-02 | NEW | Yuno | YD-03 | Pass | #82 |
-| REQ-YD-03 | NEW | Yuno | YD-04 | Pass | #83 |
+| NFR-YD-01 | CR-4 | Yuno | YD-02 | Pass | None |
+| REQ-YD-01 | CR-5 | Yuno | YD-01 | Pass | None |
+| REQ-YD-02 | NEW | Yuno | YD-03 | Pass | None |
+| REQ-YD-03 | NEW | Yuno | YD-04 | Pass | None |
 |REQ-SS-01|CR-1 | Sunny|SS-01 | Pass|None |
 | REQ-SS-02| CR-3| Sunny| SS-02| Pass| None|
 | REQ-SS-03| New| Sunny| SS-03| Pass| None|
 | NFR-SS-01| CR-2| Sunny| SS-04| Pass| None|
 | G-SS-01| New|Sunny | SS-05| Pass| None|
-| | | | | | |
+| REQ-YD-04 | New | Yuno | YD-10 | Pass | None |
+| REQ-YD-05 | New | Yuno | YD-11 | Fail | #101 |
 | | | | | | |
 | | | | | | |
 | | | | | | |

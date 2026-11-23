@@ -110,3 +110,164 @@ HOW TO USE THIS FILE
 **GitHub Issue:** N/A
 
 ---
+
+**Test ID:** YD-05
+**From Part 6:** New
+**Written by:** Yuno Dela Pena
+**Title:** Upload Audit button stays disabled when no file is selected
+**Traces to:** REQ-YD-03
+**Test type:** Negative
+**Preconditions:** App running at localhost:3000. Signed in to an existing test account.
+**Test data:** No file selected
+
+**Steps:**
+1. Open localhost:3000/dashboard/upload
+2. Do not choose a file
+3. Try to click "Upload Audit"
+
+**Expected result:** The "Upload Audit" button is greyed out and nothing is submitted or saved.
+**Actual result:** The button is greyed out and nothing is submitted.
+**Status:** Pass
+**Severity:** N/A
+**V or V:** N/A
+**GitHub Issue:** N/A
+
+---
+
+**Test ID:** YD-06
+**From Part 6:** New
+**Written by:** Yuno Dela Pena
+**Title:** A 0-byte file is rejected
+**Traces to:** REQ-YD-01
+**Test type:** Boundary Value
+**Preconditions:** App running at localhost:3000. Signed in to an existing test account.
+**Test data:** An empty file named empty.txt (0 bytes), made with `empty.txt`
+
+**Steps:**
+1. Open localhost:3000/dashboard/upload
+2. Choose empty.txt
+3. Click "Upload Audit"
+
+**Expected result:** The file is rejected with an error message and nothing is saved to audit_imports.
+**Actual result:** The file was rejected and no upload succeeded.
+**Status:** Pass
+**Severity:** N/A
+**V or V:** N/A
+**GitHub Issue:** N/A
+
+---
+
+**Test ID:** YD-07
+**From Part 6:** New
+**Written by:** Yuno Dela Pena
+**Title:** A .txt file renamed to .pdf is rejected
+**Traces to:** REQ-YD-01
+**Test type:** Negative
+**Preconditions:** App running at localhost:3000. Signed in to an existing test account.
+**Test data:** A plain text file renamed to fake-audit.pdf (contents are not a real PDF)
+
+**Steps:**
+1. Open localhost:3000/dashboard/upload
+2. Choose fake-audit.pdf
+3. Click "Upload Audit"
+
+**Expected result:** The file is rejected with an error message and nothing is saved to audit_imports.
+**Actual result:** The file was rejected and no upload succeeded.
+**Status:** Pass
+**Severity:** N/A
+**V or V:** N/A
+**GitHub Issue:** N/A
+
+---
+
+**Test ID:** YD-08
+**From Part 6:** New
+**Written by:** Yuno Dela Pena
+**Title:** A valid PDF with an uppercase extension is accepted
+**Traces to:** REQ-YD-01
+**Test type:** Boundary Value
+**Preconditions:** App running at localhost:3000. Signed in to an existing test account.
+**Test data:** A valid degree audit PDF named AUDIT.PDF (uppercase extension), under 5MB
+
+**Steps:**
+1. Open localhost:3000/dashboard/upload
+2. Choose AUDIT.PDF
+3. Click "Upload Audit"
+
+**Expected result:** The upload succeeds and the page shows the "Upload succeeded!" message, because the file is a valid PDF.
+**Actual result:** The upload succeeded and the success message was shown.
+**Status:** Pass
+**Severity:** N/A
+**V or V:** N/A
+**GitHub Issue:** N/A
+
+---
+
+**Test ID:** YD-09
+**From Part 6:** New
+**Written by:** Yuno Dela Pena
+**Title:** A file with no extension is rejected
+**Traces to:** REQ-YD-01
+**Test type:** Negative
+**Preconditions:** App running at localhost:3000. Signed in to an existing test account.
+**Test data:** A text file named "audit" with no extension
+
+**Steps:**
+1. Open localhost:3000/dashboard/upload
+2. Change the file picker filter to "All files" and choose "audit"
+3. Click "Upload Audit"
+
+**Expected result:** The file is rejected with an error message and nothing is saved to audit_imports.
+**Actual result:** The file was rejected and no upload succeeded.
+**Status:** Pass
+**Severity:** N/A
+**V or V:** N/A
+**GitHub Issue:** N/A
+
+---
+
+**Test ID:** YD-10
+**From Part 6:** New
+**Written by:** Yuno Dela Pena
+**Title:** Uploading the same audit twice does not create duplicate courses
+**Traces to:** REQ-YD-04
+**Test type:** Integration
+**Preconditions:** App running at localhost:3000. Signed in to an existing test account. You can open the app's MySQL database (degree_planner).
+**Test data:** One valid degree audit .pdf or .txt under 5MB, uploaded twice. Query: SELECT course_code, COUNT(*) AS times_saved FROM user_courses WHERE user_id = [id] GROUP BY course_code HAVING COUNT(*) > 1;
+
+**Steps:**
+1. Open localhost:3000/dashboard/upload
+2. Choose the audit file and click "Upload Audit"
+3. Upload the same file a second time
+4. In MySQL, run the test data query for the test account's user id
+
+**Expected result:** The query returns no rows, so no course is saved more than once for the same user.
+**Actual result:** The query returned "Empty set". No duplicate courses were saved. [Add what you saw in audit_imports, e.g. 2 rows or 1 row.]
+**Status:** Pass
+**Severity:** N/A
+**V or V:** N/A
+**GitHub Issue:** N/A
+
+---
+
+**Test ID:** YD-11
+**From Part 6:** New
+**Written by:** Yuno Dela Pena
+**Title:** A PDF with no readable text layer is rejected
+**Traces to:** REQ-YD-05
+**Test type:** Negative
+**Preconditions:** App running at localhost:3000. Signed in to an existing test account. You can open the app's MySQL database (degree_planner).
+**Test data:** An image-only (scanned) PDF with no text layer, under 5MB, named [file name]
+
+**Steps:**
+1. Open localhost:3000/dashboard/upload
+2. Choose the image-only PDF
+3. Click "Upload Audit"
+4. In MySQL, run: SELECT * FROM audit_imports ORDER BY id DESC LIMIT 3; and check user_courses for the new audit id
+
+**Expected result:** The file is rejected with an error message such as "No readable text found" and nothing is saved to audit_imports or user_courses.
+**Actual result:** The page showed 'Upload succeeded!' and a new audit_imports row was saved
+**Status:** Fail
+**Severity:** Medium
+**V or V:** Verification
+**GitHub Issue:** #101

@@ -39,7 +39,16 @@ export async function uploadAudit(prevState: UploadState, formData : FormData): 
            } else {
             fileContent = await file.text(); 
            }
-           
+
+        const text = fileContent.trim();
+
+        if (text.length === 0) {
+        return {
+            status: "error",
+            message: "No readable text found in this file. If it's a scanned PDF, save it again with a text layer.",
+        };
+        }
+       
         const audit = new DegreeAudit(session.user.name ?? "", fileContent);
         const degreeId = 1;
 
