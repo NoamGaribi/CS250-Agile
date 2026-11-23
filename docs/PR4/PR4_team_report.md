@@ -11,8 +11,8 @@
 |---|---|---|---|---|---|---|
 | SS-06: Signup with a 300-character email shows a generic error | Code bug | [#89](https://github.com/NoamGaribi/CS250-Agile/issues/89) | Low | Low | Sunny Suarez | Fixed |
 | SS-07: Signup with a 300-character name shows a generic error | Code bug | [#92](https://github.com/NoamGaribi/CS250-Agile/issues/92) | Low | Low | Sunny Suarez | Fixed |
-| YD-11: PDF with no text layer is accepted | Code bug | https://github.com/NoamGaribi/CS250-Agile/issues/101 | Medium | Medium | Yuno Dela Pena | Open |
-| [Yuno's failing test] | [bucket] | [Issue link] | [sev] | [prio] | Yuno Dela Pena | [status] |
+| YD-11: PDF with no text layer is accepted | Code bug | https://github.com/NoamGaribi/CS250-Agile/issues/101 | Medium | Medium | Yuno Dela Pena | Fixed |
+| YD-12: Unsigned-in users can acced /api/users showing password hashes | Code bug | https://github.com/NoamGaribi/CS250-Agile/issues/104 | High | High | Yuno Dela Pena | Fixed |
 | JL-01 (TC-2): Failing grade (F) is counted as completed | Code bug | [#88](https://github.com/NoamGaribi/CS250-Agile/issues/88) | High | High | Jania Little | Fixed |
 | JL-06: SQL export contains real user emails and password hashes | Code bug | [#72](https://github.com/NoamGaribi/CS250-Agile/issues/72) | High | High | Jania Little | Fixed |
 

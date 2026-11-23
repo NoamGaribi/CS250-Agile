@@ -271,3 +271,27 @@ HOW TO USE THIS FILE
 **Severity:** Medium
 **V or V:** Verification
 **GitHub Issue:** #101
+
+---
+
+**Test ID:** YD-12
+**From Part 6:** New
+**Written by:** Yuno Dela Pena
+**Title:** Signed-out request to /api/users is rejected and never returns password hashes
+**Traces to:** REQ-YD-06
+**Test type:** Security
+**Preconditions:** App running at localhost:3000. Signed out (use a private browser window so there is no active session). At least one account exists in the user table.
+**Test data:** URL: localhost:3000/api/users
+
+**Steps:**
+1. Open a new private browser window
+2. Type localhost:3000/api/users in the address bar and press Enter
+3. Read the response body
+4. Sign in to the app in a normal window, then open localhost:3000/api/users and read the response body
+
+**Expected result:** Signed out, the response is {"error":"Unauthorized"} with status 401 and no user data. Signed in, the response lists users with only id, email, name and last_name. The password_hash field never appears in either response.
+**Actual result:** Signed-out response listed every user and included each password_hash value.
+**Status:** Pass
+**Severity:** High
+**V or V:** Verification
+**GitHub Issue:** #104
